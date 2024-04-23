@@ -1,7 +1,7 @@
 import os
 from flask import Flask
 from redis import Redis
-
+from rq import Queue
 """
 
 Environments:
@@ -40,6 +40,10 @@ class Development(BaseConfig):
     def init_app(app: Flask):
 
         app.redis_db = Redis(host="localhost", port=6379)
+
+        app.main_queue = Queue("Main",connection=app.redis_db)
+
+        app.email_queue = Queue("Email",connection=app.redis_db)
 
         
 

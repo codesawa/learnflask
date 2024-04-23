@@ -1,8 +1,9 @@
 from app.auth import auth_bp
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, current_app
 from flask_login import login_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from app.auth.mail import send_mail
+from threading import Thread
 from app.models import User
 from app import db
 
@@ -63,6 +64,8 @@ def signup():
     db.session.commit()
 
     # email confirmation
+
+    current_app.email_queue.enqueue(send_mail, args=(new_user.email,), job_ttl="1h")
 
     return redirect(url_for("auth.login"))
 
