@@ -7,6 +7,7 @@ from threading import Thread
 from app.models import User
 from app import db
 
+
 @auth_bp.route("/login", methods=["POST", "GET"])
 def login():
 
@@ -58,14 +59,21 @@ def signup():
         email=email, name=name,
         password = generate_password_hash(password = password, salt_length=8)
     )
-
     db.session.add(new_user)
 
     db.session.commit()
 
     # email confirmation
 
-    current_app.email_queue.enqueue(send_mail, args=(new_user.email,), job_ttl="1h")
+    current_app.email_queue.enqueue(
+        send_mail, 
+        args=(
+            current_app.config.get("MAIL_SENDER"),
+            new_user.email, 
+            f"Welcome to code sawa {name}"
+        ), 
+        job_ttl="1h"
+    )
 
     return redirect(url_for("auth.login"))
 

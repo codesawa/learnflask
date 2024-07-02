@@ -24,6 +24,8 @@ class BaseConfig:
 
     SQLALCHEMY_TRACK_MODIFICATIONS =False
 
+    MAIL_SENDER = os.environ.get("MAIL_SENDER")
+
 
     @staticmethod
     def init_app(app):

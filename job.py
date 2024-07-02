@@ -4,10 +4,6 @@ def expensive_call(url):
 
     resp = requests.get(url=url)
 
-    if resp.json.get("ResultCode") > 0:
-
-        raise Exception("Mpesa Failed")
-
     return len(resp.text.split())
 
 def do_something_else():
@@ -19,3 +15,8 @@ def do_something_else():
 def on_success_count(job, connection, result, *args, **kwargs):
 
     print(f"the results {result}")
+
+
+
+
+
